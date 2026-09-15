@@ -1,0 +1,14 @@
+node_modules
+dist
+
+# Raw catalogue downloads + scratch (re-fetchable; also holds a Chrome profile)
+raw/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
