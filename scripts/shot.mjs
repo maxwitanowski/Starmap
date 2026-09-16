@@ -36,7 +36,7 @@ try {
   await connect();
   await send('Runtime.enable'); await send('Page.enable'); await send('Log.enable');
   await send('Emulation.setDeviceMetricsOverride', { width: 1600, height: 900, deviceScaleFactor: 1, mobile: false });
-  await send('Page.navigate', { url: 'http://127.0.0.1:5174/' });
+  await send('Page.navigate', { url: process.env.URL || 'http://127.0.0.1:5174/Starmap/' });
   // wait for universe
   for (let i = 0; i < 120; i++) { const ok = await evaluate('!!window.universe'); if (ok === true) break; await sleep(500); }
   await evaluate(`document.getElementById('help')?.setAttribute('hidden','')`);

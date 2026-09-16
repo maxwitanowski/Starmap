@@ -145,7 +145,7 @@ export class DeepSkyLayer {
         resolve();
       };
       img.onerror = () => resolve();
-      img.src = `/dso/${this.items[i].img}.jpg`;
+      img.src = `${import.meta.env.BASE_URL}dso/${this.items[i].img}.jpg`;
     });
     const queue = [...withImg];
     const worker = async () => { while (queue.length) await loadOne(queue.shift()); };

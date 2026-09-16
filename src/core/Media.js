@@ -117,7 +117,7 @@ export function starImpression(desc) {
   else if ('OBAFGKM'.includes(cls)) key = cls;
   if (!key) return null;
   const label = { O: 'O-type star', B: 'B-type star', A: 'A-type star', F: 'F-type star', G: 'G-type (Sun-like) star', K: 'K-type orange star', M: 'M-type red dwarf', giant: 'red giant', supergiant: 'red supergiant', bluegiant: 'blue supergiant', whitedwarf: 'white dwarf', browndwarf: 'brown dwarf', wolfrayet: 'Wolf-Rayet star' }[key];
-  return { image: `/img/stars/${key}.jpg`, caption: `Representative artist's impression of a ${label} (AI-generated, not a photograph of this star)` };
+  return { image: `${import.meta.env.BASE_URL}img/stars/${key}.jpg`, caption: `Representative artist's impression of a ${label} (AI-generated, not a photograph of this star)` };
 }
 
 export async function exoplanetImpression(desc) {

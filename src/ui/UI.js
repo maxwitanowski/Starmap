@@ -135,7 +135,7 @@ export class UI {
         if (rep) { img.src = rep.image; cap.textContent = rep.caption; fig.hidden = false; }
       } else if (desc.variant) {
         const label = { sat_station: 'space station', sat_telescope: 'space telescope', sat_comms: 'communications satellite', sat_gps: 'navigation satellite', sat_weather: 'Earth-observation satellite', sat_starlink: 'flat-panel broadband satellite', sat_cubesat: 'cubesat', sat_rocketbody: 'spent rocket stage', ast_rubble: 'rubble-pile asteroid', ast_elongated: 'elongated asteroid', ast_cratered: 'cratered asteroid', ast_irregular: 'irregular asteroid', ast_metallic: 'metallic asteroid', comet_nucleus: 'comet nucleus' }[desc.variant] || desc.variant;
-        img.src = `/models/${desc.variant}.jpg`;
+        img.src = `${import.meta.env.BASE_URL}models/${desc.variant}.jpg`;
         cap.textContent = FAMILY_LABELS[desc.variant] ? `Rendering based on the ${FAMILY_LABELS[desc.variant]} design (AI-generated from the published spacecraft design; not a photograph of this unit). The 3D model you see up close is built from it.` : `Representative rendering of a ${label} (AI-generated; no photograph of this specific object exists). The same generic shape is used for its 3D model.`;
         fig.hidden = false;
       }

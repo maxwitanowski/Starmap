@@ -103,7 +103,7 @@ export class NebulaVolumeLayer {
       const img = new Image();
       img.onload = () => go(img);
       img.onerror = () => go(spriteImg);
-      img.src = `/dso_vol/${e.img}.jpg`;
+      img.src = `${import.meta.env.BASE_URL}dso_vol/${e.img}.jpg`;
     } else go(spriteImg);
   }
   // Schematic volume from the procedural atlas cell (objects with no photograph)

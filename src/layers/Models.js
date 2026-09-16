@@ -22,7 +22,7 @@ export class ModelLayer {
     if (this.templates.has(name)) return this.templates.get(name);
     if (this.loading.has(name)) return null;
     this.loading.add(name);
-    this.loader.load(`/models/${name}.glb`, gltf => {
+    this.loader.load(`${import.meta.env.BASE_URL}models/${name}.glb`, gltf => {
       const root = gltf.scene;
       // normalise: longest side = 1, centred
       const box = new THREE.Box3().setFromObject(root); const size = new THREE.Vector3(); box.getSize(size); const c = new THREE.Vector3(); box.getCenter(c);

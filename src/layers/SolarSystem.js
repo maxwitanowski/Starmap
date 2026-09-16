@@ -10,7 +10,7 @@ const _v = new THREE.Vector3(), _v2 = new THREE.Vector3(), _v3 = new THREE.Vecto
 const GM_SUN = 1.32712440018e11; // km^3/s^2
 
 function loadTex(name, srgb = true, onLoad) {
-  const t = texLoader.load('/textures/' + name, onLoad);
+  const t = texLoader.load(import.meta.env.BASE_URL + 'textures/' + name, onLoad);
   if (srgb) t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = 8;
   return t;

@@ -16,7 +16,7 @@ async function boot() {
   const tick = () => { const p = Object.values(progress).reduce((a, b) => a + b, 0) / files.length; fill.style.width = `${(p * 100).toFixed(0)}%`; };
   await Promise.all(files.map(async ([key, file, loader]) => {
     status.textContent = `loading ${file}`;
-    data[key] = await loader(`/data/${file}?v=${DATA_VERSION}`, (got, total) => { progress[key] = total ? got / total * 0.95 : 0.5; tick(); });
+    data[key] = await loader(`${import.meta.env.BASE_URL}data/${file}?v=${DATA_VERSION}`, (got, total) => { progress[key] = total ? got / total * 0.95 : 0.5; tick(); });
     progress[key] = 1; done++; tick();
   }));
   status.textContent = 'building scene';
