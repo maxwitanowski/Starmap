@@ -1,7 +1,7 @@
 import { Universe } from './core/Universe.js';
 import { loadBinary, loadJSON, loadText } from './core/Loader.js';
 
-const DATA_VERSION = 7; // bump when public/data changes so browsers refetch
+const DATA_VERSION = 8; // bump when public/data changes so browsers refetch
 const fill = document.getElementById('load-fill'), status = document.getElementById('load-status');
 const files = [
   ['stars', 'stars.bin', loadBinary], ['starsMeta', 'stars_meta.json', loadJSON], ['exoplanets', 'exoplanets.json', loadJSON], ['constellations', 'constellations.json', loadJSON],

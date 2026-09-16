@@ -21,7 +21,7 @@ export const FAMILY_LABELS = {
 export class SatelliteLayer {
   constructor(universe, data, solar) {
     this.u = universe; this.solar = solar; this.visible = true;
-    this.groups = data.groups; this.fetched = data.fetched;
+    this.groups = data.groups; this.fetched = data.fetched; this.bundleSource = data.source || 'CelesTrak';
     this.sats = data.sats;
     this.count = this.sats.length;
     this.satrec = new Array(this.count).fill(null);
@@ -85,17 +85,27 @@ export class SatelliteLayer {
         if (i === undefined) continue;
         const s = this.sats[i];
         Object.assign(s, { ep: o.EPOCH, mm: o.MEAN_MOTION, ecc: o.ECCENTRICITY, inc: o.INCLINATION, raan: o.RA_OF_ASC_NODE, argp: o.ARG_OF_PERICENTER, ma: o.MEAN_ANOMALY, bstar: o.BSTAR, mmdot: o.MEAN_MOTION_DOT, mmddot: o.MEAN_MOTION_DDOT, rev: o.REV_AT_EPOCH, els: o.ELEMENT_SET_NO });
+        s.l1 = s.l2 = null; // fresh CelesTrak GP wins over any bundled TLE lines
         this.satrec[i] = null; this.lastT[i] = NaN; updated++;
       }
       this.liveStatus = `live elements from CelesTrak (${updated} updated ${new Date().toISOString().slice(11, 16)} UTC)`;
       this._built = 0;
     } catch (err) {
-      this.liveStatus = `bundled CelesTrak elements from ${this.fetched.slice(0, 16).replace('T', ' ')} UTC (live refresh unavailable: ${err.message})`;
+      const ageDays = (Date.now() - new Date(this.fetched)) / 86400000;
+      // SGP4 is accurate to ~1 km near its epoch and degrades by a few km/day, so say so once it matters.
+      const drift = ageDays < 2 ? '' : ` — ${ageDays.toFixed(0)} days old, so positions have drifted by roughly ${(ageDays * 10).toFixed(0)} km`;
+      this.liveStatus = `bundled ${this.bundleSource} elements from ${this.fetched.slice(0, 16).replace('T', ' ')} UTC${drift} (live refresh unavailable: ${err.message})`;
     }
   }
   _rec(i) {
     if (this.satrec[i]) return this.satrec[i];
     const s = this.sats[i];
+    // Raw TLE lines (scripts/refresh-tle.mjs) win: satellite.js parses them itself, so no
+    // element conversion of ours can get in the way. GP JSON fields are the CelesTrak path.
+    if (s.l1 && s.l2) {
+      try { this.satrec[i] = sat.twoline2satrec(s.l1, s.l2); } catch { this.satrec[i] = false; }
+      if (this.satrec[i]) return this.satrec[i];
+    }
     try {
       this.satrec[i] = sat.json2satrec({ OBJECT_NAME: s.n, OBJECT_ID: s.intl, EPOCH: s.ep, MEAN_MOTION: s.mm, ECCENTRICITY: s.ecc, INCLINATION: s.inc, RA_OF_ASC_NODE: s.raan, ARG_OF_PERICENTER: s.argp, MEAN_ANOMALY: s.ma, EPHEMERIS_TYPE: 0, CLASSIFICATION_TYPE: s.cls || 'U', NORAD_CAT_ID: s.id, ELEMENT_SET_NO: s.els, REV_AT_EPOCH: s.rev, BSTAR: s.bstar, MEAN_MOTION_DOT: s.mmdot, MEAN_MOTION_DDOT: s.mmddot });
     } catch { this.satrec[i] = false; }
