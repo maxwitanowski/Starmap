@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starmap — a to-scale 3D universe</title>
+  <script type="module" crossorigin src="/Starmap/assets/index-CcCwJIM0.js"></script>
+  <link rel="stylesheet" crossorigin href="/Starmap/assets/index-B4IIo_sz.css">
+</head>
+<body>
+  <canvas id="gl"></canvas>
+  <div id="labels"></div>
+
+  <div id="loading">
+    <div class="load-box">
+      <div class="load-title">STARMAP</div>
+      <div class="load-sub">Loading real catalogs…</div>
+      <div class="load-bar"><div id="load-fill"></div></div>
+      <div id="load-status">starting</div>
+    </div>
+  </div>
+
+  <header id="topbar">
+    <div class="brand">STARMAP <span class="brand-sub">to scale · real data</span></div>
+    <div id="search-wrap">
+      <input id="search" type="text" placeholder="Search stars, planets, galaxies, satellites…  (press /)" autocomplete="off" spellcheck="false" />
+      <div id="search-results" hidden></div>
+    </div>
+    <div class="top-right">
+      <button id="btn-help" class="icon-btn" title="Help (H)">?</button>
+    </div>
+  </header>
+
+  <aside id="layers-panel" class="panel">
+    <div class="panel-title">Layers</div>
+    <div id="layer-toggles"></div>
+    <div class="panel-title" style="margin-top:10px">Display</div>
+    <label class="slider-row"><span>Star limit mag</span><input id="limit-mag" type="range" min="4" max="13" step="0.1" value="7.5" /><output id="limit-mag-out">7.5</output></label>
+    <label class="slider-row"><span>Show every star</span><input id="all-stars" type="checkbox" /></label>
+    <label class="slider-row"><span>Label density</span><input id="label-density" type="range" min="0" max="1" step="0.05" value="0.6" /></label>
+    <div class="panel-title" style="margin-top:10px">Quick travel</div>
+    <div id="quick-travel"></div>
+  </aside>
+
+  <aside id="info-panel" class="panel" hidden>
+    <button id="info-close" class="icon-btn close">×</button>
+    <div id="info-kind" class="info-kind"></div>
+    <h2 id="info-name"></h2>
+    <div id="info-sub" class="info-sub"></div>
+    <div class="info-actions">
+      <button id="btn-goto" class="btn primary">Go to</button>
+      <button id="btn-follow" class="btn">Follow</button>
+    </div>
+    <figure id="info-media" hidden><img id="info-img" alt="" /><figcaption id="info-caption"></figcaption></figure>
+    <p id="info-desc" class="info-desc"></p>
+    <p id="info-wiki" class="info-wiki" hidden></p>
+    <table id="info-table"></table>
+    <div id="info-source" class="info-source"></div>
+  </aside>
+
+  <footer id="hud">
+    <div class="hud-group time">
+      <button id="t-rev" class="hud-btn" title="Slower / reverse">◀◀</button>
+      <button id="t-pause" class="hud-btn" title="Pause (.)">❚❚</button>
+      <button id="t-fwd" class="hud-btn" title="Faster">▶▶</button>
+      <button id="t-now" class="hud-btn" title="Jump to now">now</button>
+      <span id="t-date" class="hud-val"></span>
+      <span id="t-speed" class="hud-val dim"></span>
+    </div>
+    <div class="hud-group nav">
+      <button id="btn-mode" class="hud-btn" title="Toggle orbit / free flight (F)">orbit</button>
+      <span id="hud-focus" class="hud-val"></span>
+      <span id="hud-dist" class="hud-val dim"></span>
+      <span id="hud-speed" class="hud-val dim"></span>
+    </div>
+    <div class="hud-group scale">
+      <div id="scale-bar"><div id="scale-line"></div><span id="scale-text"></span></div>
+    </div>
+  </footer>
+
+  <div id="help" hidden>
+    <div class="help-box">
+      <h3>Navigation</h3>
+      <p><b>Orbit mode</b> (default): drag to rotate around the focused object, scroll to zoom, right-drag to look around. <b>Double-click</b> anything to fly there. <b>Click</b> to inspect.</p>
+      <p><b>Free flight</b> (press <kbd>F</kbd>): <kbd>W A S D</kbd> move, <kbd>R</kbd>/<kbd>F</kbd>… <kbd>Space</kbd>/<kbd>Shift</kbd> up/down, <kbd>Q</kbd>/<kbd>E</kbd> roll, drag to look. Scroll changes speed. Speed automatically scales with your distance to the nearest object, so you can cross light-years or inch along the ISS.</p>
+      <p><kbd>/</kbd> search · <kbd>.</kbd> pause time · <kbd>[</kbd> <kbd>]</kbd> time speed · <kbd>Esc</kbd> deselect · <kbd>H</kbd> this help</p>
+      <h3>What you are seeing</h3>
+      <p>Everything is placed at its real position and drawn at its real physical size: 113,000 stars (HYG/Hipparcos), 6,360 exoplanets (NASA Exoplanet Archive), 13,800 nebulae, clusters and galaxies (OpenNGC, Gaia clusters), 43,000 galaxies out to 400 Mly (2MASS Redshift Survey), 36,000 asteroids and 600 comets (JPL), 14,000 satellites propagated live with SGP4 (CelesTrak), 17 deep-space probes (JPL Horizons), 1.1 million Gaia DR3 stars, 368 black holes with measured masses (BlackCAT, Gaia, van den Bosch 2016) and 953,000 quasars/active galaxies with spectroscopic redshifts (Milliquas, mostly SDSS, DESI, 2QZ and LAMOST) at their comoving distances out to z ≈ 7. Zoomed all the way out, the fan and wedge shapes you see are the sky footprints of those surveys (SDSS covers the northern galactic cap, others add strips), not the shape of the universe: nobody has taken spectra of the whole sky, and the Milky Way's dust hides the galactic plane. Planet positions come from JPL orbital elements; the Moon from a lunar theory. Click anything for its Wikipedia photograph and summary; exoplanets and unnamed stars get clearly labelled AI artist's impressions instead, since no photograph exists. The Magellanic Clouds contain 108,000 real Gaia stars you can click. Exoplanets are drawn from their measured size, density and temperature (no exoplanet has a real surface map). Every nebula and star cluster is a 3D particle volume at its true physical size: photographed ones are sampled from the real images (with their stars picked out as point sources), the rest are schematic from catalogued size and shape; depth along the line of sight is always a model. The Milky Way disk itself is a model, as are the particle bodies of the 64 nearest large galaxies (shaped from their catalogued size, axis ratio, position angle and type) — only the Sun's neighbourhood has star-by-star data.</p>
+      <p class="dim">Because space is mostly empty, most things are sub-pixel dots until you get close. Markers and labels show where they are; zoom in and the real discs appear.</p>
+      <button id="help-close" class="btn primary">Close</button>
+    </div>
+  </div>
+
+</body>
+</html>
