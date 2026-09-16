@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "data": "node scripts/build-data.mjs",
-    "dss": "node scripts/fetch-dss.mjs"
+    "dss": "node scripts/fetch-dss.mjs",
+    "build:pages": "DEPLOY=1 vite build"
   },
   "dependencies": {
     "three": "^0.185.1"
