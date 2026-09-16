@@ -14,6 +14,27 @@ npm run dev        # http://127.0.0.1:5174
 `npm run data` rebuilds `public/data/*` from the raw catalogues in `raw/` (re-download them with the
 curl commands in `scripts/` history if needed); `npm run dss` fetches the deep-sky photographs.
 
+## Deploy to GitHub Pages
+
+The published site is the **built** app on the `gh-pages` branch — never the repo root,
+which holds Vite's dev `index.html` and untranspiled source.
+
+```bash
+npm run build:pages          # DEPLOY=1: sets base /Starmap/ and strips the VITE_* keys
+cd dist && git init -b gh-pages && git add -A && git commit -m Deploy
+git push -f https://github.com/maxwitanowski/Starmap.git gh-pages
+```
+
+Then set **Settings → Pages → Source** to `gh-pages` / `root` (once).
+
+Two things to keep in mind:
+
+- **Never deploy a plain `npm run build`.** Vite inlines every `VITE_*` variable at build
+  time, so an ordinary build embeds the `.env.local` keys in public JavaScript. `build:pages`
+  defines them as `undefined`; the deployed site simply loses the exoplanet artist's
+  impressions and the AI summary fallback.
+- `base` must match the repo path. For a custom domain or root deploy, build with `BASE=/`.
+
 ## What is in it
 
 | Layer | Count | Source |
